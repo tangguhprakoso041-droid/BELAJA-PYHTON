@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PyStart - Website belajar Python dari nol sampai mini project.">
+<title>PyStart — Belajar Python dari Nol</title>
+<style>
+:root{
+  --bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#64708a;--primary:#5b5ce2;
+  --primary2:#7c4dff;--line:#e5e8f0;--good:#149447;--bad:#d64545;--code:#101522;
+  --shadow:0 12px 35px rgba(33,42,74,.09);--radius:18px
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+button,input,textarea{font:inherit}
+button{cursor:pointer;border:0}
+a{color:inherit;text-decoration:none}
+.app{display:flex;min-height:100vh}
+.sidebar{width:280px;background:#111827;color:#eef2ff;position:fixed;inset:0 auto 0 0;padding:22px 16px;z-index:20;overflow:auto}
+.brand{display:flex;gap:12px;align-items:center;padding:8px 10px 22px}
+.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#ffd54a,#ff9f1c);display:grid;place-items:center;font-size:25px}
+.brand b{font-size:19px}.brand small{display:block;color:#9ca9c4}
+.nav-title{font-size:11px;color:#8d9ab5;text-transform:uppercase;letter-spacing:1.2px;padding:15px 10px 6px}
+.nav a{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:11px;color:#cbd5e1;margin:3px 0}
+.nav a:hover,.nav a.active{background:#242c40;color:white}
+.progressbox{margin:20px 4px;padding:15px;border:1px solid #30394d;border-radius:15px;background:#171f31}
+.progressline{height:8px;background:#30394d;border-radius:99px;overflow:hidden;margin-top:9px}
+.progressline span{display:block;height:100%;background:linear-gradient(90deg,#ffd54a,#ff8a00);width:0}
+.main{margin-left:280px;width:calc(100% - 280px)}
+.topbar{height:72px;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}
+.topbar-left{display:flex;align-items:center;gap:12px}.hamb{display:none}
+.search{border:1px solid var(--line);background:white;border-radius:12px;padding:9px 12px;min-width:230px;outline:none}
+.iconbtn{width:40px;height:40px;border-radius:12px;background:#eef0ff;color:#4144c7}
+.content{max-width:1180px;margin:auto;padding:30px 26px 70px}
+.hero{background:linear-gradient(135deg,#252a78,#6a4de8 65%,#9a55f6);color:white;border-radius:25px;padding:38px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"🐍";position:absolute;font-size:170px;right:30px;bottom:-45px;opacity:.14;transform:rotate(-12deg)}
+.hero h1{font-size:clamp(30px,5vw,52px);line-height:1.08;margin:0 0 12px;max-width:700px}
+.hero p{max-width:680px;color:#e8e8ff;font-size:17px}
+.btn{padding:11px 16px;border-radius:12px;font-weight:700;background:white;color:#3739b8}
+.btn.primary{background:#5b5ce2;color:white}.btn.ghost{background:transparent;color:white;border:1px solid #ffffff55}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.section{display:none}.section.active{display:block}
+h2{font-size:28px;margin:34px 0 8px}h3{margin-top:0}
+.muted{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}
+.stat,.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.stat{padding:18px}.stat b{font-size:28px;display:block}.stat span{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{padding:20px}.lesson{display:flex;flex-direction:column;min-height:190px}
+.lesson .num{width:36px;height:36px;border-radius:10px;background:#eef0ff;color:#4d4fcf;display:grid;place-items:center;font-weight:800;margin-bottom:12px}
+.lesson.done .num{background:#dcf7e7;color:#148447}
+.lesson button{margin-top:auto;text-align:left;background:#f1f3ff;color:#4548ca;padding:10px;border-radius:10px;font-weight:700}
+.code{background:var(--code);color:#e8edf7;border-radius:14px;padding:17px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:14px;white-space:pre;min-height:70px}
+.editor{width:100%;min-height:260px;background:#0b1020;color:#eaf0ff;border:1px solid #29324a;border-radius:14px;padding:16px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;resize:vertical;outline:none}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.toolbar .btn{border:1px solid var(--line);background:white;color:#333;padding:9px 13px}.toolbar .primary{color:white;background:var(--primary)}
+.output{background:#0b1020;color:#c8ffd8;border-radius:14px;padding:15px;min-height:75px;font-family:ui-monospace,monospace;white-space:pre-wrap}
+.quiz-option{display:block;width:100%;text-align:left;padding:13px;margin:8px 0;border:1px solid var(--line);border-radius:12px;background:white}
+.quiz-option:hover{border-color:var(--primary);background:#f6f6ff}
+.feedback{padding:12px;border-radius:12px;margin-top:12px;display:none}.good{background:#e5f8ed;color:#126f38}.bad{background:#fff0f0;color:#a12626}
+.tip{padding:15px;border-left:4px solid var(--primary);background:#f0f1ff;border-radius:10px;margin:15px 0}
+table{width:100%;border-collapse:collapse;background:white;border-radius:15px;overflow:hidden}.tablewrap{overflow:auto}
+th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left}
+.badge{display:inline-block;padding:4px 8px;border-radius:99px;background:#eef0ff;color:#4b4dcc;font-size:12px;font-weight:700}
+.toast{position:fixed;right:20px;bottom:20px;background:#111827;color:white;padding:13px 16px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(15px);transition:.2s;z-index:50}.toast.show{opacity:1;transform:none}
+.empty{padding:35px;text-align:center;color:var(--muted)}
+@media(max-width:900px){.sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:none}.main{margin-left:0;width:100%}.hamb{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:#eef0ff}.grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.search{min-width:0;width:150px}}
+@media(max-width:600px){.topbar{padding:0 13px}.content{padding:18px 13px 55px}.hero{padding:25px 20px}.hero:after{font-size:100px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.stat b{font-size:23px}.search{display:none}.card{padding:16px}h2{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">🐍</div><div><b>PyStart</b><small>Belajar Python</small></div></div>
+  <nav class="nav">
+    <div class="nav-title">Menu</div>
+    <a href="#home" data-section="home">🏠 Dashboard</a>
+    <a href="#lessons" data-section="lessons">📚 Materi</a>
+    <a href="#playground" data-section="playground">💻 Playground</a>
+    <a href="#quiz" data-section="quiz">🧠 Quiz</a>
+    <a href="#cheatsheet" data-section="cheatsheet">📋 Cheat Sheet</a>
+    <div class="nav-title">Progress</div>
+    <a href="#roadmap" data-section="roadmap">🗺️ Roadmap</a>
+  </nav>
+  <div class="progressbox">
+    <small>Progress belajar</small>
+    <b id="sideProgress">0%</b>
+    <div class="progressline"><span id="sideBar"></span></div>
+  </div>
+</aside>
+
+<main class="main">
+<header class="topbar">
+  <div class="topbar-left"><button class="hamb" id="hamb">☰</button><strong id="pageTitle">Dashboard</strong></div>
+  <div><input class="search" id="search" placeholder="Cari materi..."></div>
+  <button class="iconbtn" id="reset" title="Reset progress">↻</button>
+</header>
+
+<div class="content">
+<section id="home" class="section active">
+  <div class="hero">
+    <span class="badge">PYTHON UNTUK PEMULA</span>
+    <h1>Belajar Python pelan-pelan, tapi jadi.</h1>
+    <p>Dari <b>print()</b>, variabel, dan <b>input()</b> sampai percabangan, perulangan, fungsi, dan mini project. Cocok buat kamu yang baru mulai.</p>
+    <div class="actions"><button class="btn" onclick="go('lessons')">🚀 Mulai belajar</button><button class="btn ghost" onclick="go('playground')">💻 Coba kode</button></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><b id="statDone">0</b><span>Materi selesai</span></div>
+    <div class="stat"><b>16</b><span>Materi utama</span></div>
+    <div class="stat"><b id="statQuiz">0</b><span>Quiz benar</span></div>
+    <div class="stat"><b id="statLevel">Pemula</b><span>Level saat ini</span></div>
+  </div>
+  <h2>Mulai dari sini 👇</h2>
+  <div class="card">
+    <h3>🎯 Misi pertama: pahami input()</h3>
+    <p class="muted">Kamu tadi sedang belajar <code>input()</code>. Intinya: Python berhenti sebentar untuk menunggu pengguna mengetik sesuatu.</p>
+    <div class="code">nama = input("Masukkan nama: ")
+print("Halo", nama)</div>
+    <div class="tip">Kalau muncul <b>Masukkan nama:</b>, itu bukan error. Program memang sedang menunggu kamu mengetik lalu menekan Enter.</div>
+  </div>
+</section>
+
+<section id="lessons" class="section">
+  <h2>📚 Materi Python</h2><p class="muted">Selesaikan satu per satu. Jangan buru-buru—yang penting ngerti.</p>
+  <div class="grid" id="lessonGrid"></div>
+</section>
+
+<section id="lessonDetail" class="section">
+  <button class="btn primary" onclick="go('lessons')">← Kembali ke materi</button>
+  <div id="lessonContent"></div>
+</section>
+
+<section id="playground" class="section">
+  <h2>💻 Python Playground</h2>
+  <p class="muted">Tulis kode Python di sini. Karena halaman HTML tunggal ini tidak membawa interpreter Python penuh, fitur ini melakukan pengecekan dasar dan simulasi output untuk contoh pemula.</p>
+  <div class="toolbar">
+    <button class="btn primary" id="runCode">▶ Jalankan / cek</button>
+    <button class="btn" id="exampleCode">✨ Contoh</button>
+    <button class="btn" id="clearCode">🗑️ Bersihkan</button>
+  </div>
+  <textarea class="editor" id="editor" spellcheck="false">nama = input("Nama kamu: ")
+print("Halo", nama)</textarea>
+  <h3>Output</h3><div class="output" id="output">Tekan "Jalankan / cek".</div>
+  <div class="tip">💡 Untuk menjalankan Python sungguhan di browser, kamu bisa memakai Google Colab. Website ini fokus sebagai tempat belajar + latihan dasar.</div>
+</section>
+
+<section id="quiz" class="section">
+  <h2>🧠 Quiz Python</h2><p class="muted">Jawab satu per satu. Skor tersimpan otomatis.</p>
+  <div class="card" id="quizCard"></div>
+</section>
+
+<section id="cheatsheet" class="section">
+  <h2>📋 Cheat Sheet Python</h2>
+  <div class="tablewrap"><table>
+  <thead><tr><th>Perintah</th><th>Fungsi</th><th>Contoh</th></tr></thead>
+  <tbody>
+  <tr><td><code>print()</code></td><td>Menampilkan teks/data</td><td><code>print("Halo")</code></td></tr>
+  <tr><td><code>input()</code></td><td>Menerima input pengguna</td><td><code>nama=input("Nama: ")</code></td></tr>
+  <tr><td><code>#</code></td><td>Comment</td><td><code># catatan</code></td></tr>
+  <tr><td><code>if</code></td><td>Percabangan kondisi</td><td><code>if umur &gt;= 17:</code></td></tr>
+  <tr><td><code>elif</code></td><td>Kondisi alternatif</td><td><code>elif umur == 16:</code></td></tr>
+  <tr><td><code>else</code></td><td>Kondisi terakhir</td><td><code>else:</code></td></tr>
+  <tr><td><code>for</code></td><td>Perulangan</td><td><code>for i in range(5):</code></td></tr>
+  <tr><td><code>while</code></td><td>Perulangan selama kondisi benar</td><td><code>while x &lt; 5:</code></td></tr>
+  <tr><td><code>def</code></td><td>Membuat fungsi</td><td><code>def sapa():</code></td></tr>
+  <tr><td><code>len()</code></td><td>Menghitung panjang</td><td><code>len("Python")</code></td></tr>
+  <tr><td><code>int()</code></td><td>Mengubah ke bilangan bulat</td><td><code>umur=int(input())</code></td></tr>
+  <tr><td><code>float()</code></td><td>Mengubah ke desimal</td><td><code>nilai=float(input())</code></td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="roadmap" class="section">
+  <h2>🗺️ Roadmap Python</h2>
+  <div class="card">
+    <h3>Level 1 — Dasar</h3><p>print → comment → variabel → tipe data → input → operator</p>
+    <h3>Level 2 — Logika</h3><p>if/elif/else → perbandingan → logika AND/OR/NOT</p>
+    <h3>Level 3 — Perulangan</h3><p>for → range → while → break/continue</p>
+    <h3>Level 4 — Data</h3><p>list → tuple → dictionary → set → string</p>
+    <h3>Level 5 — Struktur program</h3><p>fungsi → parameter → return → module → error handling</p>
+    <h3>Level 6 — Project</h3><p>Kalkulator → tebak angka → data siswa → aplikasi sederhana.</p>
+  </div>
+</section>
+</div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const lessons=[
+["print()","Menampilkan sesuatu ke layar.",`print("Halo dunia!")`,`Output: Halo dunia!`],
+["Comment","# untuk catatan yang tidak dijalankan Python.",`# Ini komentar
+print("Halo")`,`Komentar membantu menjelaskan kode.`],
+["Variabel","Tempat menyimpan data. Nama variabel harus valid.",`nama = "Tangguh"
+umur = 16
+print(nama, umur)`,`Output: Tangguh 16`],
+["Tipe Data","String, integer, float, boolean, dan lainnya.",`nama = "Tangguh"  # str
+umur = 16           # int
+tinggi = 170.5      # float
+aktif = True        # bool`,`Gunakan type(data) untuk melihat tipe.`],
+["input()","Menerima masukan dari pengguna.",`nama = input("Masukkan nama: ")
+print("Halo", nama)`,`Program menunggu kamu mengetik + Enter.`],
+["Konversi Data","Input selalu berupa string, jadi angka biasanya perlu diubah.",`umur = int(input("Umur: "))
+print(umur + 1)`,`Jika input 16 → 17`],
+["Operator","Melakukan perhitungan dan perbandingan.",`a = 10
+b = 3
+print(a + b)
+print(a > b)`,`13 lalu True`],
+["if / elif / else","Membuat keputusan berdasarkan kondisi.",`nilai = 80
+if nilai >= 75:
+    print("Lulus")
+else:
+    print("Belum lulus")`,`Output: Lulus`],
+["for","Mengulang kode beberapa kali.",`for i in range(5):
+    print(i)`,`Output: 0 1 2 3 4`],
+["while","Mengulang selama kondisi masih True.",`x = 1
+while x <= 3:
+    print(x)
+    x += 1`,`Output: 1 2 3`],
+["List","Menyimpan banyak data dalam satu variabel.",`buah = ["apel", "mangga", "jeruk"]
+print(buah[0])`,`Output: apel`],
+["Dictionary","Menyimpan data dengan pasangan key dan value.",`siswa = {"nama":"Tangguh", "kelas":"X"}
+print(siswa["nama"])`,`Output: Tangguh`],
+["String","Mengolah teks.",`teks = "Python"
+print(teks.upper())
+print(len(teks))`,`PYTHON lalu 6`],
+["Fungsi","Membuat blok kode yang bisa dipakai ulang.",`def sapa(nama):
+    return "Halo " + nama
+
+print(sapa("Tangguh"))`,`Output: Halo Tangguh`],
+["Error & Debugging","Belajar membaca pesan error, bukan takut melihatnya.",`angka = 10
+print(angka + 5)`,`Tips: baca baris error terakhir dan cek tanda kurung/indentasi.`],
+["Mini Project","Gabungkan materi menjadi program kecil.",`nama = input("Nama: ")
+nilai = int(input("Nilai: "))
+
+if nilai >= 75:
+    status = "Lulus"
+else:
+    status = "Belum lulus"
+
+print(nama, "-", status)`,`Program sederhana data nilai siswa.`]
+];
+
+const state=JSON.parse(localStorage.getItem("pystart")||'{"done":[],"quiz":0}');
+let currentQuiz=0;
+const quizzes=[
+["Apa fungsi print()?","Menerima input","Menampilkan output","Menghapus data","Menjalankan internet",1],
+["Perintah untuk menerima masukan pengguna adalah...","input()","print()","len()","type()",0],
+["Manakah nama variabel yang valid?","nama siswa","2nama","nama_siswa","nama-siswa",2],
+["Hasil int(\"10\") adalah...","Teks 10","Angka 10","10.0","Error",1],
+["Kondisi alternatif setelah if adalah...","for","else/elif","def","input",1],
+["Manakah yang termasuk list?","(1,2)","{1,2}","[1,2]","<1,2>",2]
+];
+
+function save(){localStorage.setItem("pystart",JSON.stringify(state));updateProgress()}
+function updateProgress(){
+ const p=Math.round(state.done.length/lessons.length*100);
+ document.getElementById("sideProgress").textContent=p+"%";
+ document.getElementById("sideBar").style.width=p+"%";
+ document.getElementById("statDone").textContent=state.done.length;
+ document.getElementById("statQuiz").textContent=state.quiz;
+ document.getElementById("statLevel").textContent=p<35?"Pemula":p<70?"Menengah":"Mantap!";
+}
+function toast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1800)}
+function go(id){
+ document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+ const sec=document.getElementById(id)||document.getElementById("home");sec.classList.add("active");
+ document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.dataset.section===id));
+ const titles={home:"Dashboard",lessons:"Materi",playground:"Playground",quiz:"Quiz",cheatsheet:"Cheat Sheet",roadmap:"Roadmap",lessonDetail:"Materi"};
+ document.getElementById("pageTitle").textContent=titles[id]||"PyStart";
+ document.getElementById("sidebar").classList.remove("open");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderLessons(filter=""){
+ const grid=document.getElementById("lessonGrid");grid.innerHTML="";
+ lessons.forEach((l,i)=>{
+  if(filter && !l[0].toLowerCase().includes(filter.toLowerCase())) return;
+  const d=document.createElement("div");d.className="card lesson "+(state.done.includes(i)?"done":"");
+  d.innerHTML=`<div class="num">${state.done.includes(i)?"✓":i+1}</div><h3>${l[0]}</h3><p class="muted">${l[1]}</p><button onclick="openLesson(${i})">${state.done.includes(i)?"Ulangi materi":"Pelajari →"}</button>`;
+  grid.appendChild(d);
+ });
+ if(!grid.children.length)grid.innerHTML='<div class="empty">Materi tidak ditemukan 😅</div>';
+}
+function openLesson(i){
+ const l=lessons[i];
+ document.getElementById("lessonContent").innerHTML=`<h2>${i+1}. ${l[0]}</h2><p class="muted">${l[1]}</p><div class="code">${escapeHtml(l[2])}</div><h3>Hasil / catatan</h3><div class="card">${escapeHtml(l[3])}</div><div class="toolbar"><button class="btn primary" onclick="completeLesson(${i})">✓ Tandai selesai</button><button class="btn" onclick="go('playground')">💻 Latihan di Playground</button></div>`;
+ go("lessonDetail");
+}
+function completeLesson(i){if(!state.done.includes(i)){state.done.push(i);save();toast("Materi selesai! 🎉")}else toast("Materi ini sudah selesai.");renderLessons();openLesson(i)}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function renderQuiz(){
+ const q=quizzes[currentQuiz];
+ document.getElementById("quizCard").innerHTML=`<span class="badge">Soal ${currentQuiz+1}/${quizzes.length}</span><h3>${q[0]}</h3><div>${q.slice(1,5).map((o,i)=>`<button class="quiz-option" onclick="answerQuiz(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div><div id="quizFeedback" class="feedback"></div>`;
+}
+function answerQuiz(i){
+ const q=quizzes[currentQuiz],f=document.getElementById("quizFeedback");
+ f.style.display="block";
+ if(i===q[5]){state.quiz++;save();f.className="feedback good";f.textContent="✅ Benar! Mantap.";toast("Jawaban benar! 🎯")}
+ else{f.className="feedback bad";f.textContent="❌ Belum tepat. Coba pahami lagi materinya."}
+ setTimeout(()=>{currentQuiz=(currentQuiz+1)%quizzes.length;renderQuiz()},900);
+}
+document.querySelectorAll(".nav a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.section)}));
+document.getElementById("hamb").onclick=()=>document.getElementById("sidebar").classList.toggle("open");
+document.getElementById("reset").onclick=()=>{if(confirm("Reset semua progress belajar?")){state.done=[];state.quiz=0;save();renderLessons();toast("Progress direset.")}};
+document.getElementById("search").addEventListener("input",e=>{go("lessons");renderLessons(e.target.value)});
+document.getElementById("exampleCode").onclick=()=>{document.getElementById("editor").value=`nama = input("Masukkan nama: ")
+umur = int(input("Masukkan umur: "))
+
+print("Halo", nama)
+print("Tahun depan umur kamu", umur + 1)`;document.getElementById("output").textContent="Contoh dimasukkan. Tekan Jalankan / cek."};
+document.getElementById("clearCode").onclick=()=>{document.getElementById("editor").value="";document.getElementById("output").textContent="Editor kosong."};
+document.getElementById("runCode").onclick=()=>{
+ const code=document.getElementById("editor").value.trim(),out=document.getElementById("output");
+ if(!code){out.textContent="Tidak ada kode untuk dicek.";return}
+ let errors=[];
+ if((code.match(/\(/g)||[]).length!==(code.match(/\)/g)||[]).length)errors.push("Jumlah tanda kurung () tidak seimbang.");
+ if((code.match(/"/g)||[]).length%2!==0 || (code.match(/'/g)||[]).length%2!==0)errors.push("Ada tanda kutip yang belum ditutup.");
+ const lines=code.split("\n");
+ lines.forEach((x,n)=>{if(/^\s+(if|for|while|def)\b/.test(x))errors.push(`Baris ${n+1}: kemungkinan indentasi/struktur perlu dicek.`)});
+ if(errors.length){out.textContent="⚠️ Pemeriksaan menemukan:\n- "+errors.join("\n- ")}
+ else{
+  let sim=code;
+  sim=sim.replace(/input\((["'])(.*?)\1\)/g,'"<input>"');
+  const prints=[];for(const m of sim.matchAll(/print\((.*?)\)/g)){prints.push(m[1].replace(/["']/g,"").replace(/,\s*/g," "))}
+  out.textContent=prints.length?"✅ Struktur dasar terlihat aman.\n\nPerkiraan print:\n"+prints.join("\n"):"✅ Tidak ditemukan masalah dasar. Untuk eksekusi Python sungguhan gunakan Google Colab.";
+ }
+};
+window.addEventListener("hashchange",()=>{const id=location.hash.slice(1);if(document.getElementById(id))go(id)});
+renderLessons();renderQuiz();updateProgress();
+</script>
+</body>
+</html>
